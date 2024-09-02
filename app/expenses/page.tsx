@@ -3,7 +3,7 @@
 import Header from "@/components/Header";
 import { ExpenseByCategorySummary, useGetExpensesByCategoryQuery } from "@/state/api";
 import { useMemo, useState } from "react"
-import { Pie, PieChart, ResponsiveContainer } from "recharts";
+import { Cell, Legend, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
 
 type AggregatedDataItem = {
     name: string;
@@ -38,8 +38,10 @@ const Expenses = () => {
         }).reduce((acc: AggregatedData, data: ExpenseByCategorySummary) => {
             const amount = parseInt(data.amount);
             if (!acc[data.category]) {
-                acc[data.category] = { name: data.category, amount: 0 }
-                acc[data.category].color = `#${Math.floor(Math.random() * 1677215).toString(16)}`
+                acc[data.category] = { name: data.category, amount: 0 };
+                acc[data.category].color = `#${Math.floor(
+                    Math.random() * 16777215
+                ).toString(16)}`;
                 acc[data.category].amount += amount;
             }
             return acc
@@ -139,7 +141,13 @@ const Expenses = () => {
                             dataKey="amount"
                             onMouseEnter={(_, index) => setActiveIndex(index)}
                         >
-                            </Pie>
+                            {aggregatedData.map((entry: AggregatedDataItem, index: number) => (
+                                <Cell key={`cell-${index}`} fill={index === activeIndex ? "rgb(29, 78, 216)" : entry.color}
+                                /> 
+                            ))}
+                        </Pie>
+                        <Tooltip />
+                        <Legend />
                     </PieChart>
                 </ResponsiveContainer>
             </div>
