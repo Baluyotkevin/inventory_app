@@ -12,7 +12,7 @@ const columns: GridColDef[] = [
 
 const Users = () => {
     const { data: users, isError, isLoading } = useGetUsersQuery();
-    console.log(users)
+
     if (isLoading) {
         return <div className="py-4">Loading...</div>
     }
